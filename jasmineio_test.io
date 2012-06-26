@@ -11,6 +11,10 @@ Spec run := method(
 		self message := ex error)
 )
 
+Jasmine := Object clone 
+Jasmine suites := List clone
+Jasmine clone := Jasmine
+
 describe := method(description,
 	suite := Suite clone
 	specs := List clone
@@ -32,6 +36,7 @@ describe := method(description,
 		specs append(spec)
 	)	
 
+	Jasmine suites append(suite)
 	suite
 )
 
@@ -48,8 +53,7 @@ stringEquals := method(expected, actual,
   )  
 )
 
-suite := describe("jasmine.io", 
-	
+describe("jasmine.io", 	
 	it("can check for truth",
 		equals(true, true)
 	), 
@@ -77,7 +81,7 @@ suite := describe("jasmine.io",
 	)
 )
 
-specSuite := describe("Spec",
+describe("Spec",
 	it("Should be possible to run a spec and detect failure",
 		failingSpec := Spec clone
 		failingSpec test := method(
@@ -88,15 +92,15 @@ specSuite := describe("Spec",
 	),
 
 	it("Should be possible to get description of spec",
-		suite := describe("Suite", it("Spec"))
+		suite := describe("A Suite", it("Spec"))
 		equals("Spec", suite specs at(0) description)
 	)
 )
-specSuite run
-equals("", specSuite specs at(0) message)
-equals("", specSuite specs at(1) message)
+Jasmine suites at(1) run
+equals("", Jasmine suites at(1) specs at(0) message)
+equals("", Jasmine suites at(1) specs at(1) message)
 
-suiteSuite := describe("Suite", 	
+describe("Suite", 	
 	it("Should be possible to run a suite and detect failure",
 		failingSuite := describe("A failing suite",
 			it("True is false",
@@ -112,6 +116,6 @@ suiteSuite := describe("Suite",
 		equals("My Description", suite description)
 	)
 )
-suiteSuite run
-equals("", suiteSuite specs at(0) message)
-equals("", suiteSuite specs at(1) message)
+Jasmine suites at(3) run
+equals("", Jasmine suites at(3) specs at(0) message)
+equals("", Jasmine suites at(3) specs at(1) message)
