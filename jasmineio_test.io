@@ -77,29 +77,41 @@ suite := describe("jasmine.io",
 	)
 )
 
-suite run
+specSuite := describe("Spec",
+	it("Should be possible to run a spec and detect failure",
+		failingSpec := Spec clone
+		failingSpec test := method(
+			Exception raise("Something went wrong...")
+		)
+		failingSpec run
+		equals("Something went wrong...", failingSpec message)
+	),
 
-suite description println
-suite specs foreach(spec,
-	write("\t" .. spec description .. ": ")
-	writeln(spec message)
-)
-
-equals("jasmine.io", suite description)
-equals("can check for truth", suite specs at(0) description)
-equals("can check for lies", suite specs at(1) description)
-
-failingSpec := Spec clone
-failingSpec test := method(
-	Exception raise("Something went wrong...")
-)
-failingSpec run
-equals("Something went wrong...", failingSpec message)
-
-failingSuite := describe("A failing suite",
-	it("True is false",
-		equals(true, false)
+	it("Should be possible to get description of spec",
+		suite := describe("Suite", it("Spec"))
+		equals("Spec", suite specs at(0) description)
 	)
 )
-failingSuite run
-equals("Expected true, but was false", failingSuite specs at(0) message)
+specSuite run
+equals("", specSuite specs at(0) message)
+equals("", specSuite specs at(1) message)
+
+suiteSuite := describe("Suite", 	
+	it("Should be possible to run a suite and detect failure",
+		failingSuite := describe("A failing suite",
+			it("True is false",
+				equals(true, false)
+			)
+		)
+		failingSuite run
+		equals("Expected true, but was false", failingSuite specs at(0) message)
+	),
+
+	it("Should be possible to get the description of the suite",
+		suite := describe("My Description")
+		equals("My Description", suite description)
+	)
+)
+suiteSuite run
+equals("", suiteSuite specs at(0) message)
+equals("", suiteSuite specs at(1) message)
