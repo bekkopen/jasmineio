@@ -59,10 +59,7 @@ stringEquals := method(expected, actual,
 
 files := Directory with(Directory currentWorkingDirectory) files
 filenames := files map(file, file name) select(name, name endsWithSeq("_spec.io"))
-
-filenames foreach(filename,
-	doFile(filename)
-)
+filenames foreach(filename, doFile(filename))
 
 Jasmine suites foreach(suite,
 	suite run
