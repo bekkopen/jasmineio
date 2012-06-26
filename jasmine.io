@@ -1,3 +1,20 @@
+Spec := Object clone
+Spec run := method(
+	ex := try(doMessage(test))	
+	if(ex == nil, 
+		self message := "", 
+		self message := ex error)
+	yield
+)
+
+Suite := Object clone
+Suite run := method(
+	specs foreach(spec, 
+		spec run
+		yield
+	)
+)
+
 Jasmine := Object clone 
 Jasmine suites := List clone
 Jasmine clone := Jasmine
@@ -64,5 +81,3 @@ Jasmine suites foreach(suite,
 	writeln("Results: " .. suite specs size .. " specs, " .. failures .. " failures")
 	writeln()
 )
-
-#while(Scheduler yieldingCoros size > 1, yield)
