@@ -44,18 +44,44 @@ describe := method(description,
 	suite
 )
 
+// Matchers
+expected_str := method(expected, actual, 
+	if(expected type == actual type,
+		"Expected " .. expected .. ", but was " .. actual,
+		"Expected " .. expected .. "(" .. expected type .. "), but was " .. actual .."(" .. actual type .. ")"
+	)
+	
+)
+
 equals := method(expected, actual,
 	if(expected != actual,
-		Exception raise("Expected " .. expected .. ", but was " .. actual)
+		Exception raise(expected_str(expected, actual))
 	)
 )
 
 stringEquals := method(expected, actual,
   expected foreach(i, char, 
   	if(expected at(i) asCharacter != actual at(i) asCharacter,
-  		Exception raise("Expected " .. expected .. ", but was " .. actual .. ". Strings differ at index " .. i))
+  		Exception raise(expected_str(expected, actual) .. ". Strings differ at index " .. i))
   )  
 )
+
+expect := method(expected, expected)
+
+toEqual := method(actual, 
+	if(self != actual,
+		Exception raise(expected_str(self, actual)), true # Return true if all well
+	)
+)
+
+toBeNil := method( 
+	if(self != nil,
+		Exception raise(expected_str(nil, self)), true # Return true if all well
+	)
+)
+
+
+// Runtime
 
 files := Directory with(Directory currentWorkingDirectory) files
 filenames := files map(file, file name) select(name, name endsWithSeq("_spec.io"))

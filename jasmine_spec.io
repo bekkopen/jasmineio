@@ -5,7 +5,7 @@ describe("jasmine.io equals",
 
 	it("can check for lies",
 		ex := try(equals(true, false))
-		equals("Expected true, but was false", ex error)
+		equals("Expected true(true), but was false(false)", ex error)
 	)
 )
 
@@ -45,7 +45,7 @@ describe("jasmine.io Suite",
 			)
 		)
 		failingSuite run
-		equals("Expected true, but was false", failingSuite specs at(0) message)
+		equals("Expected true(true), but was false(false)", failingSuite specs at(0) message)
 		Jasmine suites remove(failingSuite)
 	),
 
