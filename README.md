@@ -8,3 +8,4 @@ Jasmine.Io is a port of the Jasmine library, a behavior-driven development frame
 - Expect syntax, i.e: expect(true) toBe(true)
 - Simple github pages landing page + examples
 - oooxoooooxxoo runner (visualizing results)
+- support for sub directories
