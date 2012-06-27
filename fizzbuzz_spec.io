@@ -7,18 +7,18 @@ getFizzBuzz := method(number,
 
 describe("FizzBuzz",
 	it("Should return Fizz for divisible of three",
-		equals("Fizz", getFizzBuzz(3))
+		expect(getFizzBuzz(3)) toBe("Fizz")
 	),
 
 	it("Should return Buzz for divisible of five",
-		equals("Buzz", getFizzBuzz(5))
+		expect(getFizzBuzz(5)) toBe("Buzz")
 	),
 
 	it("Should return FizzBuzz for divisible of three and five",
-		equals("FizzBuzz", getFizzBuzz(15))
+		expect(getFizzBuzz(15)) toBe("FizzBuzz")
 	),
 
 	it("Should return number if not divisible by three or five",
-		equals(2, getFizzBuzz(2))
+		expect(getFizzBuzz(2)) toBe(2)
 	)
 )

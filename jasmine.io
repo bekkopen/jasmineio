@@ -1,3 +1,47 @@
+Matcher := Object clone
+
+Matcher message := ""
+
+Matcher toEqual := method(expected,
+	if(actual == expected, return true)
+	self message := "Expected " .. expected .. " (" .. expected type .. "), but was " .. actual .. " (" .. actual type .. ")"
+	false
+)
+
+Matcher toBe := method(expected,
+	if(expected type == Sequence type,
+		toBeString(expected),
+		toEqual(expected))
+)
+
+Matcher toBeString := method(expected,
+	if(expected == actual, return true)
+	expected foreach(i, char, 
+  		if(expected at(i) asCharacter != actual at(i) asCharacter,
+  			self message := "Expected " .. expected .. ", but was " .. actual .. ". Strings differ at index " .. i)
+  	)  	
+  	false
+)
+
+Matcher toBeNil := method(
+	if(actual == nil, return true)
+	self message := "Expected nil, but was " .. actual
+	false
+)
+
+expect := method(actual,
+	wrapper := Object clone
+	wrapper setSlot("actual", actual)
+	wrapper forward := method(
+		matcher := Matcher clone
+		matcher setSlot("actual", actual)
+		matcher setSlot("success", matcher doMessage(call message, actual))
+		if(matcher success == false, Exception raise(matcher message))
+		matcher
+	)
+	wrapper
+)
+
 Spec := Object clone
 Spec run := method(
 	ex := try(doMessage(test))	
@@ -44,45 +88,7 @@ describe := method(description,
 	suite
 )
 
-// Matchers
-expected_str := method(expected, actual, 
-	if(expected type == actual type,
-		"Expected " .. expected .. ", but was " .. actual,
-		"Expected " .. expected .. "(" .. expected type .. "), but was " .. actual .."(" .. actual type .. ")"
-	)
-	
-)
-
-equals := method(expected, actual,
-	if(expected != actual,
-		Exception raise(expected_str(expected, actual))
-	)
-)
-
-stringEquals := method(expected, actual,
-  expected foreach(i, char, 
-  	if(expected at(i) asCharacter != actual at(i) asCharacter,
-  		Exception raise(expected_str(expected, actual) .. ". Strings differ at index " .. i))
-  )  
-)
-
-expect := method(expected, expected)
-
-toEqual := method(actual, 
-	if(self != actual,
-		Exception raise(expected_str(self, actual)), true # Return true if all well
-	)
-)
-
-toBeNil := method( 
-	if(self != nil,
-		Exception raise(expected_str(nil, self)), true # Return true if all well
-	)
-)
-
-
-// Runtime
-
+# Runtime
 files := Directory with(Directory currentWorkingDirectory) files
 filenames := files map(file, file name) select(name, name endsWithSeq("_spec.io"))
 filenames foreach(filename, doFile(filename))

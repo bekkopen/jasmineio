@@ -1,22 +1,11 @@
-describe("jasmine.io equals", 	
-	it("can check for truth",
-		equals(true, true)
-	), 
-
-	it("can check for lies",
-		ex := try(equals(true, false))
-		equals("Expected true(true), but was false(false)", ex error)
-	)
-)
-
 describe("jasmine.io stringEquals",
 	it("can check that two strings are the same",
-		stringEquals("Jasmine.Io", "Jasmine.Io")
+		expect("Jasmine.Io") toBe("Jasmine.Io")
 	),
 
 	it("can determine where two strings differ",
-		ex := try(stringEquals("Jasmine.Io", "Jasmine.Js"))
-		equals("Expected Jasmine.Io, but was Jasmine.Js. Strings differ at index 8", ex error)
+		ex := try(expect("Jasmine.Io") toBe("Jasmine.Js"))	
+		expect(ex error) toEqual("Expected Jasmine.Js, but was Jasmine.Io. Strings differ at index 9")
 	)	
 )
 
@@ -27,12 +16,12 @@ describe("jasmine.io Spec",
 			Exception raise("Something went wrong...")
 		)
 		failingSpec run
-		equals("Something went wrong...", failingSpec message)
+		expect(failingSpec message) toBe("Something went wrong...")
 	),
 
 	it("Should be possible to get description of spec",
 		suite := describe("A Suite", it("Spec"))
-		equals("Spec", suite specs at(0) description)
+		expect(suite specs(0) at(0) description) toBe("Spec")
 		Jasmine suites remove(suite)
 	)
 )
@@ -45,7 +34,7 @@ describe("jasmine.io Suite",
 			)
 		)
 		failingSuite run
-		equals("Expected true(true), but was false(false)", failingSuite specs at(0) message)
+		expect(failingSuite specs at(0) message) toBe("Expected true(true), but was false(false)")
 		Jasmine suites remove(failingSuite)
 	),
 
