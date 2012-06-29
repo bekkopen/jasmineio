@@ -1,4 +1,4 @@
-xdescribe("Suites", 	
+describe("Suites", 	
 	it("Should be possible to run a suite and detect failure",
 		failingSuite := describe("A failing suite",
 			it("True is false",
@@ -24,7 +24,7 @@ xdescribe("Suites",
 	)
 )
 
-xdescribe("Specs",
+describe("Specs",
 	it("Should be possible to run a spec and detect failure",
 		failingSpec := Spec clone
 		failingSpec test := method(
@@ -42,8 +42,8 @@ xdescribe("Specs",
 	)
 )
 
-xdescribe("Disabling of suites and specs",
-	it("Should be possible to disable a suite by using xdescribe",
+describe("Disabling of suites and specs",
+	it("Should be possible to disable a suite by using describe",
 		noSuite := xdescribe("A disabled")
   		expect(noSuite) toBeNil()
 	),

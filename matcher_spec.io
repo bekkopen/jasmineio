@@ -10,7 +10,7 @@ describe("A custom matcher",
 	)
 )
 
-xdescribe("Matcher tests for toEqual",
+describe("Matcher tests for toEqual",
 	it("should expect true toEqual true to be true",
 		matcher := expect(true) toEqual(true)
 		expect(matcher success) toBe(true)
@@ -47,7 +47,7 @@ xdescribe("Matcher tests for toEqual",
 	)
 )
 
-xdescribe("toBeNil Matcher",
+describe("toBeNil Matcher",
 
 	it("should expect nil toBeNil",
 		result := expect(nil) toBeNil()
@@ -60,7 +60,7 @@ xdescribe("toBeNil Matcher",
 	)
 )
 
-xdescribe("toBe Matcher for strings",
+describe("toBe Matcher for strings",
 	it("can check that two strings are the same",
 		expect("Jasmine.Io") toBe("Jasmine.Io")
 	),
