@@ -1,3 +1,11 @@
+Matcher toBeLessThan := method(expected, actual < expected)
+
+Matcher toBeGreaterThan := method(expected,
+	if(actual > expected, return false)
+	self message := actual .. " is not greater than " .. expected
+	false
+)
+
 describe("A custom matcher",
 	it("is possible to add a new matcher by adding to the Matcher prototype",
 		matcher := expect(1) toBeLessThan(2)
@@ -6,7 +14,12 @@ describe("A custom matcher",
 
 	it("should generate a default error message for custom matchers",
 		ex := try(expect(2) toBeLessThan(1))
-		expect(ex error) toBe("Expected 2 toBeLessThan 1")
+		expect(ex error) toEqual("Expected 2 to be less than 1")
+	),
+
+	it("should use custom error message if set by custom matcher",
+		ex := try(expect(1) toBeGreaterThan(2))
+		expect(ex error) toBe("1 is not greater than 2")
 	)
 )
 
@@ -80,6 +93,6 @@ describe("Not matcher",
 
         it("inverts default error messages",
                 ex := try(expect(1) not toBeLessThan(2))
-                expect(ex error) toEqual("Expected 1 not toBeLessThan 2")
+                expect(ex error) toEqual("Expected 1 not to be less than 2")
         )
 )

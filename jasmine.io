@@ -16,7 +16,6 @@ Matcher toBeString := method(expected,
 	if(expected == actual, return true)
 	expected foreach(i, char, 
   		if(expected at(i) asCharacter != actual at(i) asCharacter,
-  	
   		self message := "Expected " .. expected .. ", but was " .. actual .. ". Strings differ at index " .. i)
   	)  	
   	false
@@ -28,12 +27,19 @@ Matcher toBeNil := method(
 	false
 )
 
-Matcher toBeLessThan := method(expected,
-	actual < expected
+Matcher message := method(inverted,
+	"Expected " .. actual .. if(inverted, " not ", " ") .. expectiation fromCamelCaseToSentence .. " " .. expected
 )
 
-Matcher message := method(inverted,
-        "Expected " .. actual .. if(inverted, " not ", " ") .. expectiation .. " " .. expected
+Sequence fromCamelCaseToSentence := method(
+	output := ""
+	self foreach(i, char,
+		if(char asCharacter isUppercase, 
+			output = output asMutable appendSeq(" ", char asCharacter lowercase),
+			output = output asMutable appendSeq(char asCharacter)
+		)
+	)
+	output
 )
 
 expect := method(actual,
