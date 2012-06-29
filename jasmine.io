@@ -16,7 +16,6 @@ Matcher toBeString := method(expected,
 	if(expected == actual, return true)
 	expected foreach(i, char, 
   		if(expected at(i) asCharacter != actual at(i) asCharacter,
-  	
   		self message := "Expected " .. expected .. ", but was " .. actual .. ". Strings differ at index " .. i)
   	)  	
   	false
@@ -29,7 +28,18 @@ Matcher toBeNil := method(
 )
 
 Matcher message := method(
-	"Expected " .. actual .. " " .. expectiation .. " " .. expected
+	"Expected " .. actual .. " " .. expectiation fromCamelCaseToSentence .. " " .. expected
+)
+
+Sequence fromCamelCaseToSentence := method(
+	output := ""
+	self foreach(i, char,
+		if(char asCharacter isUppercase, 
+			output = output asMutable appendSeq(" ", char asCharacter lowercase),
+			output = output asMutable appendSeq(char asCharacter)
+		)
+	)
+	output
 )
 
 expect := method(actual,
@@ -40,7 +50,7 @@ expect := method(actual,
 		matcher actual := actual
 		matcher expected := call message arguments at(0)
 		matcher expectiation := call message name
-		matcher success := matcher doMessage(call message, actual)		
+		matcher success := matcher doMessage(call message)		
 		if(matcher success == false, Exception raise(matcher message))
 		matcher
 	)
