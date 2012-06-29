@@ -1,7 +1,5 @@
 Matcher := Object clone
 
-Matcher message := ""
-
 Matcher toEqual := method(expected,
 	if(actual == expected, return true)
 	self message := "Expected " .. expected .. " (" .. expected type .. "), but was " .. actual .. " (" .. actual type .. ")"
@@ -30,13 +28,19 @@ Matcher toBeNil := method(
 	false
 )
 
+Matcher message := method(
+	"Expected " .. actual .. " " .. expectiation .. " " .. expected
+)
+
 expect := method(actual,
 	wrapper := Object clone
 	wrapper actual := actual
 	wrapper forward := method(
 		matcher := Matcher clone
 		matcher actual := actual
-		matcher success := matcher doMessage(call message, actual)
+		matcher expected := call message arguments at(0)
+		matcher expectiation := call message name
+		matcher success := matcher doMessage(call message, actual)		
 		if(matcher success == false, Exception raise(matcher message))
 		matcher
 	)
@@ -75,11 +79,9 @@ describe := method(description,
 
 	args foreach(arg,
 		specDescription := arg arguments at(0) asString asMutable removePrefix("\"") removeSuffix("\"")		
-
 		spec := Spec clone
 		spec description := specDescription
 		spec test := arg arguments at(1)
-
 		if(arg name beginsWithSeq("x"), continue, specs append(spec))		
 	)	
 
