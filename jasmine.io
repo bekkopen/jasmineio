@@ -28,20 +28,30 @@ Matcher toBeNil := method(
 	false
 )
 
-Matcher message := method(
-	"Expected " .. actual .. " " .. expectiation .. " " .. expected
+Matcher toBeLessThan := method(expected,
+	actual < expected
+)
+
+Matcher message := method(inverted,
+        "Expected " .. actual .. if(inverted, " not ", " ") .. expectiation .. " " .. expected
 )
 
 expect := method(actual,
 	wrapper := Object clone
 	wrapper actual := actual
+        wrapper inverted := false
+        wrapper not := method(
+                self inverted := true
+                self
+        )
 	wrapper forward := method(
 		matcher := Matcher clone
 		matcher actual := actual
 		matcher expected := call message arguments at(0)
 		matcher expectiation := call message name
 		matcher success := matcher doMessage(call message, actual)		
-		if(matcher success == false, Exception raise(matcher message))
+                if(inverted, matcher success := if(matcher success, false, true))
+		if(matcher success == false, Exception raise(matcher message(inverted)))
 		matcher
 	)
 	wrapper
@@ -102,7 +112,7 @@ Jasmine suites foreach(suite,
 
 	suite specs foreach(spec,
 		if(spec message isEmpty,
-			writeln("  ✓ " .. spec description .. " : passed"),
+			writeln("  ✓ " .. spec description .. ": passed"),
 			writeln("  ϰ " .. spec description .. ": " .. spec message))
 	)
 

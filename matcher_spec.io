@@ -1,7 +1,3 @@
-Matcher toBeLessThan := method(expected,			
-	actual < expected;			
-)
-
 describe("A custom matcher",
 	it("is possible to add a new matcher by adding to the Matcher prototype",
 		matcher := expect(1) toBeLessThan(2)
@@ -73,4 +69,17 @@ xdescribe("toBe Matcher for strings",
 		ex := try(expect("Jasmine.Io") toBe("Jasmine.Js"))	
 		expect(ex error) toEqual("Expected Jasmine.Js, but was Jasmine.Io. Strings differ at index 9")
 	)	
+)
+
+describe("Not matcher",
+
+        it("inverts expectation",
+                result := expect(1) not toEqual(2)
+                expect(result success) toBe(true)
+        ),
+
+        it("inverts default error messages",
+                ex := try(expect(1) not toBeLessThan(2))
+                expect(ex error) toEqual("Expected 1 not toBeLessThan 2")
+        )
 )
