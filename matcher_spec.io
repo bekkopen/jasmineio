@@ -5,7 +5,7 @@ describe("A custom matcher",
 		)
 		matcher := expect(1) toBeLessThan(2)
 		expect(matcher success) toBe(true)
-	),
+	),	
 
 	it("is possible to customize the failure message of a custom Matcher",
 		Matcher toBeLessThan := method(expected,			
@@ -15,7 +15,6 @@ describe("A custom matcher",
 )
 
 describe("Matcher tests for toEqual",
-
 	it("should expect true toEqual true to be true",
 		matcher := expect(true) toEqual(true)
 		expect(matcher success) toBe(true)
@@ -63,4 +62,15 @@ describe("toBeNil Matcher",
 		ex := try(expect(2) toBeNil())
 		expect(ex error) toBe("Expected nil, but was 2")		
 	)
+)
+
+describe("toBe Matcher for strings",
+	it("can check that two strings are the same",
+		expect("Jasmine.Io") toBe("Jasmine.Io")
+	),
+
+	it("can determine where two strings differ",
+		ex := try(expect("Jasmine.Io") toBe("Jasmine.Js"))	
+		expect(ex error) toEqual("Expected Jasmine.Js, but was Jasmine.Io. Strings differ at index 9")
+	)	
 )

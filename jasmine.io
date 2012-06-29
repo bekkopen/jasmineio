@@ -18,7 +18,8 @@ Matcher toBeString := method(expected,
 	if(expected == actual, return true)
 	expected foreach(i, char, 
   		if(expected at(i) asCharacter != actual at(i) asCharacter,
-  			self message := "Expected " .. expected .. ", but was " .. actual .. ". Strings differ at index " .. i)
+  	
+  		self message := "Expected " .. expected .. ", but was " .. actual .. ". Strings differ at index " .. i)
   	)  	
   	false
 )
@@ -31,11 +32,11 @@ Matcher toBeNil := method(
 
 expect := method(actual,
 	wrapper := Object clone
-	wrapper setSlot("actual", actual)
+	wrapper actual := actual
 	wrapper forward := method(
 		matcher := Matcher clone
-		matcher setSlot("actual", actual)
-		matcher setSlot("success", matcher doMessage(call message, actual))
+		matcher actual := actual
+		matcher success := matcher doMessage(call message, actual)
 		if(matcher success == false, Exception raise(matcher message))
 		matcher
 	)
@@ -48,14 +49,13 @@ Spec run := method(
 	if(ex == nil, 
 		self message := "", 
 		self message := ex error)
-	yield
+	self
 )
 
 Suite := Object clone
 Suite run := method(
 	specs foreach(spec, 
 		spec run
-		yield
 	)
 )
 
@@ -74,19 +74,20 @@ describe := method(description,
 	args removeFirst
 
 	args foreach(arg,
-
 		specDescription := arg arguments at(0) asString asMutable removePrefix("\"") removeSuffix("\"")		
 
 		spec := Spec clone
 		spec description := specDescription
 		spec test := arg arguments at(1)
 
-		specs append(spec)
+		if(arg name beginsWithSeq("x"), continue, specs append(spec))		
 	)	
 
 	Jasmine suites append(suite)
 	suite
 )
+
+xdescribe := method(nil)
 
 # Runtime
 files := Directory with(Directory currentWorkingDirectory) files
