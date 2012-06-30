@@ -45,11 +45,13 @@ Sequence fromCamelCaseToSentence := method(
 expect := method(actual,
 	wrapper := Object clone
 	wrapper actual := actual
-        wrapper inverted := false
-        wrapper not := method(
-                self inverted := true
-                self
-        )
+    wrapper inverted := false
+    
+    wrapper not := method(
+    	self inverted := true
+        self
+    )
+	
 	wrapper forward := method(
 		matcher := Matcher clone
 		matcher actual := actual
@@ -108,8 +110,14 @@ describe := method(description,
 xdescribe := method(nil)
 
 # Runtime
+
+runnerArguments := System args rest
+
 files := Directory with(Directory currentWorkingDirectory) files
-filenames := files map(file, file name) select(name, name endsWithSeq("_spec.io"))
+filenames := files map(file, file name) select(name, 
+	name endsWithSeq("_spec.io") and;
+	(runnerArguments size == 0 or runnerArguments contains(name)))
+
 filenames foreach(filename, doFile(filename))
 
 Jasmine suites foreach(suite,
