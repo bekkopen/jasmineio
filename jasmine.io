@@ -109,7 +109,7 @@ describe := method(description,
 
 xdescribe := method(nil)
 
-# Runtime
+# Runner
 files := List clone
 runnerArguments := System args rest map(item,
 	Directory currentWorkingDirectory asMutable appendSeq("/", item))
@@ -119,7 +119,13 @@ Directory with(Directory currentWorkingDirectory) walk(item,
 		files append(item path))
 )
 
-files foreach(filename, doFile(filename))
+files foreach(filename, 
+	ex := try(doFile(filename))
+	if(ex != nil, 
+		writeln("Error loading spec file: " .. filename)
+		writeln("Message: " .. ex error .. "\n")
+	)
+)
 
 Jasmine suites foreach(suite,
 	suite run
