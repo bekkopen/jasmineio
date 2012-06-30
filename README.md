@@ -46,6 +46,44 @@ FizzBuzz
 Results: 4 specs, 0 failures
 ```
 
+## Custom Matchers ##
+Extending Jasmine.Io with custom matchers are dead simple. You simply add a new method to the Matcher prototype that evaluates to true or false. Jasmine.Io will generate resenoable error messages automatically, or you can choose to customize the error message yourself.
+
+```Io
+Matcher toBeLessThan := method(expected, actual < expected)
+
+Matcher toBeGreaterThan := method(expected,
+	if(actual > expected, return false)
+	self message := actual .. " is not greater than " .. expected
+	false
+)
+
+describe("Custom matchers",
+	it("is possible to add matchers by adding a method to the Matcher prototype",
+		expect(1) toBeLessThan(2)		
+	),	
+
+	it("should error messages generated automatically",
+		expect(2) toBeLessThan(1)
+	),
+
+	it("is possible to customize the error message if you want to",
+		expect(1) toBeGreaterThan(2)
+	)
+)
+```
+
+```
+$ Io jasmine.io matcher_spec.io 
+Custom matchers
+  ✓ is possible to add matchers by adding a method to the Matcher prototype: passed
+  ϰ should error messages generated automatically: Expected 2 to be less than 1
+  ϰ is possible to customize the error message if you want to: 1 is not greater than 2
+
+Results: 3 specs, 2 failures
+
+```
+
 ## Contributors ##
 - [Trond Klakken](https://twitter.com/trondkla)
 - [Mikkel Dan-Ronglie](https://twitter.com/mikkelbd/)
