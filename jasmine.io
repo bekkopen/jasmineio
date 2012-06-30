@@ -110,15 +110,16 @@ describe := method(description,
 xdescribe := method(nil)
 
 # Runtime
+files := List clone
+runnerArguments := System args rest map(item,
+	Directory currentWorkingDirectory asMutable appendSeq("/", item))
 
-runnerArguments := System args rest
+Directory with(Directory currentWorkingDirectory) walk(item, 
+	if(item name endsWithSeq("_spec.io") and (runnerArguments size == 0 or runnerArguments contains(item path)), 
+		files append(item path))
+)
 
-files := Directory with(Directory currentWorkingDirectory) files
-filenames := files map(file, file name) select(name, 
-	name endsWithSeq("_spec.io") and;
-	(runnerArguments size == 0 or runnerArguments contains(name)))
-
-filenames foreach(filename, doFile(filename))
+files foreach(filename, doFile(filename))
 
 Jasmine suites foreach(suite,
 	suite run
