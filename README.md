@@ -85,7 +85,7 @@ Results: 3 specs, 2 failures
 
 ## Contributors ##
 - [Trond Klakken](https://twitter.com/trondkla)
-- [Mikkel Dan-Ronglie](https://twitter.com/mikkelbd/)
+- [Mikkel Dan-Rognlie](https://twitter.com/mikkelbd/)
 - [Torgeir Thoresen](https://twitter.com/torgeir)
 - [Eivind Sorteberg](https://twitter.com/sorteberg)
 - [Jonas Follesø](https://twitter.com/follesoe)
