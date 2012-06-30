@@ -81,7 +81,6 @@ Custom matchers
   ϰ is possible to customize the error message if you want to: 1 is not greater than 2
 
 Results: 3 specs, 2 failures
-
 ```
 
 ## Contributors ##
