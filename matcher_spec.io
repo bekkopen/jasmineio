@@ -23,6 +23,18 @@ describe("A custom matcher",
 	)
 )
 
+describe("toThrow matcher",
+	it("should be possible to test that an exception is thrown",
+		matcher := expect(block(Exception raise("Something crashed"))) toThrow()
+		expect(matcher success) toBe(true)
+	),
+
+	it("should fail if an exception is not thrown",
+		ex := try(expect(block(1)) toThrow())
+		expect(ex error) toBe("Expected an exception to be thrown, but no exception was thrown.")
+	)
+)
+
 describe("Matcher tests for toEqual",
 	it("should expect true toEqual true to be true",
 		matcher := expect(true) toEqual(true)
@@ -61,7 +73,6 @@ describe("Matcher tests for toEqual",
 )
 
 describe("toBeNil Matcher",
-
 	it("should expect nil toBeNil",
 		result := expect(nil) toBeNil()
 		expect(result success) toBe(true)
@@ -86,13 +97,13 @@ describe("toBe Matcher for strings",
 
 describe("Not matcher",
 
-        it("inverts expectation",
-                result := expect(1) not toEqual(2)
-                expect(result success) toBe(true)
-        ),
+	it("inverts expectation",
+		result := expect(1) not toEqual(2)
+		expect(result success) toBe(true)
+	),
 
-        it("inverts default error messages",
-                ex := try(expect(1) not toBeLessThan(2))
-                expect(ex error) toEqual("Expected 1 not to be less than 2")
-        )
+	it("inverts default error messages",
+		ex := try(expect(1) not toBeLessThan(2))
+		expect(ex error) toEqual("Expected 1 not to be less than 2")
+	)
 )

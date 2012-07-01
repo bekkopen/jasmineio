@@ -27,6 +27,15 @@ Matcher toBeNil := method(
 	false
 )
 
+Matcher toThrow := method(
+	ex := try(actual call)
+	if(ex == nil,
+		self message := "Expected an exception to be thrown, but no exception was thrown."
+		return false,
+		return true
+	)
+)
+
 Matcher message := method(inverted,
 	"Expected " .. actual .. if(inverted, " not ", " ") .. expectiation fromCamelCaseToSentence .. " " .. expected
 )
@@ -42,11 +51,11 @@ Sequence fromCamelCaseToSentence := method(
 	output
 )
 
-expect := method(actual,
+expect := method(actual,	
 	wrapper := Object clone
-	wrapper actual := actual
     wrapper inverted := false
-    
+    wrapper actual := actual
+
     wrapper not := method(
     	self inverted := true
         self
@@ -58,10 +67,12 @@ expect := method(actual,
 		matcher expected := call message arguments at(0)
 		matcher expectiation := call message name
 		matcher success := matcher doMessage(call message, actual)		
-                if(inverted, matcher success := if(matcher success, false, true))
+        
+        if(inverted, matcher success := if(matcher success, false, true))
 		if(matcher success == false, Exception raise(matcher message(inverted)))
 		matcher
 	)
+
 	wrapper
 )
 
