@@ -12,6 +12,20 @@ Matcher toBe := method(expected,
 		toEqual(expected))
 )
 
+Matcher toBeTrue := method(
+	if(actual,
+		return true,
+		self message := "Expected true, but was false"
+		return false)
+)
+
+Matcher toBeFalse := method(
+	if(actual == false,
+		return true,
+		self message := "Expected false, but was true"
+		return false)
+)
+
 Matcher toBeString := method(expected,
 	if(expected == actual, return true)
 	expected foreach(i, char, 

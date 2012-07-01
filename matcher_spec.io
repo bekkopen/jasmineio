@@ -95,8 +95,29 @@ describe("toBe Matcher for strings",
 	)	
 )
 
-describe("Not matcher",
+describe("true and false matcher",
+	it("can check for true",
+		matcher := expect(true) toBeTrue()
+		expect(matcher success) toBe(true)
+	),
 
+	it("gets correct error message for toBeTrue",
+		ex := try(expect(false) toBeTrue())
+		expect(ex error) toBe("Expected true, but was false")
+	),
+
+	it("can check for false",
+		matcher := expect(false) toBeFalse()
+		expect(matcher success) toBe(true)
+	),
+
+	it("gets correct error message for toBeFalse",
+		ex := try(expect(true) toBeFalse())
+		expect(ex error) toBe("Expected false, but was true")
+	)	
+)
+
+describe("Not matcher",
 	it("inverts expectation",
 		result := expect(1) not toEqual(2)
 		expect(result success) toBe(true)
