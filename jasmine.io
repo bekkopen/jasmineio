@@ -35,6 +35,10 @@ Matcher toBeString := method(expected,
   	false
 )
 
+Matcher toContain := method(expected,
+	actual contains(expected)
+)
+
 Matcher toBeNil := method(
 	if(actual == nil, return true)
 	self message := "Expected nil, but was " .. actual

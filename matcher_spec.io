@@ -6,7 +6,7 @@ Matcher toBeGreaterThan := method(expected,
 	false
 )
 
-describe("A custom matcher",
+describe("Custom matchers",
 	it("is possible to add a new matcher by adding to the Matcher prototype",
 		matcher := expect(1) toBeLessThan(2)
 		expect(matcher success) toBe(true)
@@ -115,6 +115,13 @@ describe("true and false matcher",
 		ex := try(expect(true) toBeFalse())
 		expect(ex error) toBe("Expected false, but was true")
 	)	
+)
+
+describe("List matcher",
+	it("can check if an item exists in a list",
+		num := list(1, 2, 3, 4, 5)
+		expect(num) toContain(1)
+	)
 )
 
 describe("Not matcher",
