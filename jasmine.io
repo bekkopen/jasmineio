@@ -138,6 +138,20 @@ describe := method(description,
 
 xdescribe := method(nil)
 
+# Colors
+colors := Object clone do(
+        red   := "[0;31m"
+        green := "[0;32m"
+        # more colors at http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
+)
+
+colors slotNames foreach(color,
+        colorCode := colors getSlot(color)
+        Sequence setSlot(color, method(
+                27 asCharacter .. self .. call target .. 27 asCharacter .. "[0m"
+        ) setScope(colorCode))
+)
+
 # Runner
 files := List clone
 runnerArguments := System args rest map(item,
@@ -162,14 +176,18 @@ Jasmine suites foreach(suite,
 
 	suite specs foreach(spec,
 		if(spec message isEmpty,
-			writeln("  ✓ " .. spec description .. ": passed"),
-			writeln("  ϰ " .. spec description .. ": " .. spec message))
+			("  ✓ " .. spec description) green println
+                        ,
+			("  ✖ " .. spec description) red println
+                        ("    " .. spec message) red println)
 	)
 
-	success := suite specs select(spec, spec message isEmpty) size
+	success  := suite specs select(spec, spec message isEmpty) size
 	failures := suite specs size - success
 
+	report := "Results: " .. suite specs size .. " specs, " .. failures .. " failures"
+
 	writeln()
-	writeln("Results: " .. suite specs size .. " specs, " .. failures .. " failures")
+        if(failures > 0, report red println, report green println)
 	writeln()
 )
