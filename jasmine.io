@@ -54,6 +54,12 @@ Matcher toThrow := method(
 	)
 )
 
+Matcher toHaveSlot := method(expected,
+	if ((actual slotNames) contains(expected), return true)
+	self message := "Expected object to have slot " .. expected .. ", but it didn't."
+	false
+)
+
 Matcher message := method(inverted,
 	"Expected " .. actual .. if(inverted, " not ", " ") .. expectiation fromCamelCaseToSentence .. " " .. expected
 )
