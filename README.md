@@ -89,6 +89,7 @@ Results: 3 specs, 2 failures
 - [Torgeir Thoresen](https://twitter.com/torgeir)
 - [Eivind Sorteberg](https://twitter.com/sorteberg)
 - [Jonas Follesø](https://twitter.com/follesoe)
+- [Johannes Hoff](http://johanneshoff.com/)
 
 
 
