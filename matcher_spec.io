@@ -124,6 +124,20 @@ describe("List matcher",
 	)
 )
 
+describe("toHaveSlot matcher",
+	it("can find a slot on an object",
+		obj := Object clone
+		obj foo := nil
+		expect(obj) toHaveSlot("foo")
+	),
+
+	it("should fail to find a non-existing slot on an object",
+		obj := Object clone
+		ex := try(expect(obj) toHaveSlot("foo"))
+		expect(ex error) toBe("Expected object to have slot foo, but it didn't.")
+	)
+)
+
 describe("Not matcher",
 	it("inverts expectation",
 		result := expect(1) not toEqual(2)
