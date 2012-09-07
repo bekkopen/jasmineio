@@ -78,7 +78,7 @@ Matcher toHaveSlot := method(expected,
 )
 
 Matcher message := method(inverted,
-	"Expected " .. actual .. if(inverted, " not ", " ") .. expectiation fromCamelCaseToSentence .. " " .. expected
+	"Expected " .. actual .. if(inverted, " not ", " ") .. expectation fromCamelCaseToSentence .. " " .. expected
 )
 
 Sequence fromCamelCaseToSentence := method(
@@ -106,7 +106,7 @@ expect := method(actual,
 		matcher := Matcher clone
 		matcher actual := actual
 		matcher expected := call message arguments at(0)
-		matcher expectiation := call message name
+		matcher expectation := call message name
 		matcher success := matcher doMessage(call message, actual)		
         
         if(inverted, matcher success := if(matcher success, false, true))
