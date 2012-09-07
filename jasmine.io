@@ -55,7 +55,7 @@ Matcher toThrow := method(
 )
 
 Matcher toHaveSlot := method(expected,
-	if ((actual slotNames) contains(expected), return true)
+	if (actual hasSlot(expected), return true)
 	self message := "Expected object to have slot " .. expected .. ", but it didn't."
 	false
 )
