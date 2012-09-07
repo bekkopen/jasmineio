@@ -26,13 +26,30 @@ Matcher toBeFalse := method(
 		return false)
 )
 
+Matcher stringDiffIndex := method(string1, string2,
+	if(string1 == string2, return nil)
+
+  index := 0
+  // Special case for string2 having string1 as a prefix
+  if (string2 beginsWithSeq(string1),
+    index = string1 size,
+
+    // Otherwise we do a normal search
+    string1 foreach(i, char,
+      index = i
+      if(string2 at(i) isNil or
+        string1 at(i) asCharacter != string2 at(i) asCharacter,
+        break
+      )
+    )
+  )
+  index
+)
+
 Matcher toBeString := method(expected,
 	if(expected == actual, return true)
-	expected foreach(i, char, 
-  		if(expected at(i) asCharacter != actual at(i) asCharacter,
-  		self message := "Expected " .. expected .. ", but was " .. actual .. ". Strings differ at index " .. i)
-  	)  	
-  	false
+  self message := "Expected " .. expected .. ", but was " .. actual .. ". Strings differ at index " .. stringDiffIndex(expected, actual)
+  false
 )
 
 Matcher toContain := method(expected,
