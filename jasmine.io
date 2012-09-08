@@ -62,7 +62,40 @@ Matcher toBeNil := method(
   false
 )
 
-Matcher toThrow := method(
+Matcher toThrowWithMessage := method(expected,
+  ex := try(actual call)
+  if(ex == nil,
+    self message := "Expected an exception to be thrown with message '" .. expected .. "', but no exception was thrown."
+    return false,
+    if(ex error != expected,
+      self message := "Expected an exception to be thrown with message '" .. expected .. "', but an exception with message '" .. ex error .. "' was thrown."
+      return false,
+      return true
+    )
+  )
+)
+
+Matcher toThrowWithType := method(expected,
+  ex := try(actual call)
+  if(ex == nil,
+    self message := "Expected an exception to be thrown of type " .. expected type .. ", but no exception was thrown."
+    return false,
+    if(ex type != expected type,
+      self message := "Expected an exception to be thrown of type " .. expected type .. ", but an exception of type " .. ex type .. " was thrown."
+      return false,
+      return true
+    )
+  )
+)
+
+Matcher toThrow := method(expected,
+  if(expected != nil,
+    if(expected type == Sequence type,
+      return toThrowWithMessage(expected),
+      return toThrowWithType(expected)
+    )
+  )
+
   ex := try(actual call)
   if(ex == nil,
     self message := "Expected an exception to be thrown, but no exception was thrown."
