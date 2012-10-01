@@ -90,6 +90,7 @@ Results: 3 specs, 2 failures
 - [Eivind Sorteberg](https://twitter.com/sorteberg)
 - [Jonas Follesø](https://twitter.com/follesoe)
 - [Johannes Hoff](http://johanneshoff.com/)
+- [Ryan Leavengood](https://twitter.com/leavengood)
 
 
 

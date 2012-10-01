@@ -23,6 +23,9 @@ describe("Custom matchers",
 	)
 )
 
+MyException := Exception clone
+YourException := Exception clone
+
 describe("toThrow matcher",
 	it("should be possible to test that an exception is thrown",
 		matcher := expect(block(Exception raise("Something crashed"))) toThrow()
@@ -32,7 +35,38 @@ describe("toThrow matcher",
 	it("should fail if an exception is not thrown",
 		ex := try(expect(block(1)) toThrow())
 		expect(ex error) toBe("Expected an exception to be thrown, but no exception was thrown.")
+	),
+
+	it("should be possible to test that an exception with a certain message is thrown",
+		matcher := expect(block(Exception raise("Something crashed"))) toThrow("Something crashed")
+		expect(matcher success) toBe(true)
+	),
+
+	it("should fail if an exception is not thrown and should show the message being looked for",
+		ex := try(expect(block(1)) toThrow("Something crashed"))
+		expect(ex error) toBe("Expected an exception to be thrown with message 'Something crashed', but no exception was thrown.")
+	),
+
+	it("should fail if an exception is not thrown with that exact message",
+		ex := try(expect(block(Exception raise("Oops"))) toThrow("Something crashed"))
+		expect(ex error) toBe("Expected an exception to be thrown with message 'Something crashed', but an exception with message 'Oops' was thrown.")
+	),
+
+	it("should fail if an exception is not thrown when looking for a specific type",
+		ex := try(expect(block(1)) toThrow(MyException))
+		expect(ex error) toBe("Expected an exception to be thrown of type MyException, but no exception was thrown.")
+	),
+
+	it("should fail if an exception is not thrown of a specific type",
+		ex := try(expect(block(YourException raise)) toThrow(MyException))
+		expect(ex error) toBe("Expected an exception to be thrown of type MyException, but an exception of type YourException was thrown.")
+	),
+
+	it("should be possible to test that an exception with a specific type is thrown",
+		matcher := expect(block(MyException raise)) toThrow(MyException)
+		expect(matcher success) toBe(true)
 	)
+
 )
 
 describe("Matcher tests for toEqual",
@@ -84,6 +118,28 @@ describe("toBeNil Matcher",
 	)
 )
 
+describe("String diff index",
+  it("Should return nil for the same string",
+    expect(Matcher stringDiffIndex("abcdef", "abcdef")) toEqual(nil)
+  ),
+
+  it("Should return 0 for totally different strings",
+    expect(Matcher stringDiffIndex("abcdef", "fedcba")) toEqual(0)
+  ),
+
+  it("Should return the first index of different characters for partially similar strings",
+    expect(Matcher stringDiffIndex("abcdef", "abcfed")) toEqual(3)
+  ),
+
+  it("Should return the size of the first string if the second string has the first as a prefix",
+    expect(Matcher stringDiffIndex("abcdef", "abcdefgh")) toEqual(6)
+  ),
+
+  it("Should return the size of the second string if the first string has the second as a prefix",
+    expect(Matcher stringDiffIndex("abcdefgh", "abcdef")) toEqual(6)
+  )
+)
+
 describe("toBe Matcher for strings",
 	it("can check that two strings are the same",
 		expect("Jasmine.Io") toBe("Jasmine.Io")
@@ -91,7 +147,7 @@ describe("toBe Matcher for strings",
 
 	it("can determine where two strings differ",
 		ex := try(expect("Jasmine.Io") toBe("Jasmine.Js"))	
-		expect(ex error) toEqual("Expected Jasmine.Js, but was Jasmine.Io. Strings differ at index 9")
+		expect(ex error) toEqual("Expected Jasmine.Js, but was Jasmine.Io. Strings differ at index 8")
 	)	
 )
 
