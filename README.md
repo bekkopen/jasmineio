@@ -91,12 +91,14 @@ target doSomething
 expect(spy) toHaveBeenCalledWith("the value we expect")
 ```
 
-You can also inspect the spy's `calls` property, which is a list with one element per call received. Each element is a list of arguments. If you want to call the real method in addition to recording calls, use `andCallThrough`. Or use `andForwardTo` to call any method on any object:
+You can also inspect the spy's `calls` property, which is a list with one element per call received. Each element is a list of arguments. If you want to call the real method in addition to recording calls, use `andCallThrough`. You can also use `andForwardTo` to call any method on any object or `andCallFake` to call a block:
 
 ```io
 spy := spyOn(target, "writeln") andCallThrough
 // Alternately:
 spy := spyOn(target, "writeln") andForwardTo(someObject, "someMethodName")
+// Alternately:
+spy := spyOn(target, "writeln") andCallFake(block(/* do something */))
 target doSomething 
 expect(spy) toHaveBeenCalledWith("the value we expect")
 ```

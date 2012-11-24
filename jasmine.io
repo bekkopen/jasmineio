@@ -225,6 +225,9 @@ Spy andForwardTo := method(target, methodName,
   self forwardTo := list(target, methodName)
   self
 )
+Spy andCallFake := method(blockToCall,
+  self forwardTo := list(blockToCall, "call")
+)
 // isSpy is just an aid to the Jasmine tests for spies.
 Spy isSpy := true
 

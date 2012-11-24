@@ -48,6 +48,18 @@ describe("Spies",
 		spy2 := spyOn(fake, "bar")
 		spiedOn foo("asdf", 5)
 		expect(spy2) toHaveBeenCalledWith("asdf", 5)
+	),
+
+	it("should call the block specified by andCallFake",
+		spiedOn := Object clone
+		blockCalled := false
+		spyOn(spiedOn, "foo") andCallFake(block(a, b,
+			blockCalled = true
+			ignored := expect(a) toEqual("asdf")
+			expect(b) toEqual(5)
+		))
+		spiedOn foo("asdf", 5)
+		expect(blockCalled) toEqual(true)
 	)
 )
 
