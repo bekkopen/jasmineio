@@ -39,6 +39,15 @@ describe("Spies",
 		spy := spyOn(spiedOn, "foo") andCallThrough
 		spiedOn foo("asdf", 5)
 		expect(spiedOn realMethodCalled) toEqual(true)
+	),
+
+	it("should forward to the fake specified by calling andForwardTo",
+		spiedOn := Object clone
+		fake := Object clone
+		spy := spyOn(spiedOn, "foo") andForwardTo(fake, "bar")
+		spy2 := spyOn(fake, "bar")
+		spiedOn foo("asdf", 5)
+		expect(spy2) toHaveBeenCalledWith("asdf", 5)
 	)
 )
 

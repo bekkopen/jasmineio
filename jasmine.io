@@ -195,13 +195,13 @@ spyOn := method(obj, methodName,
 Spy := Object clone
 Spy init := method(
   self calls := List clone
-  self shouldCallThrough := false
+  self forwardTo := nil
 )
 Spy run := method(a, b, c, d, e,
   arglist := self argsToList(a, b, c, d, e)
   self calls append(arglist)
-  if(self shouldCallThrough,
-    call delegateToMethod(self obj, self realMethodSlotName),
+  if(self forwardTo,
+    call delegateToMethod(self forwardTo at(0), self forwardTo at(1))
     // We haven't been configured to do anything, so just return
     // what would be the real method's "self".
     self obj)
@@ -218,7 +218,11 @@ Spy argsToList := method(a, b, c, d, e,
   return list()
 )
 Spy andCallThrough := method(
-  self shouldCallThrough = true
+  self forwardTo := list(self obj, self realMethodSlotName)
+  self
+)
+Spy andForwardTo := method(target, methodName,
+  self forwardTo := list(target, methodName)
   self
 )
 // isSpy is just an aid to the Jasmine tests for spies.
