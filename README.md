@@ -83,6 +83,42 @@ Custom matchers
 Results: 3 specs, 2 failures
 ```
 
+## Spies ##
+Jasmine.io supports spies, which allow you to record and verify calls made to a method:
+```io
+spy := spyOn(target, "writeln")
+target doSomething
+expect(spy) toHaveBeenCalledWith("the value we expect")
+```
+
+You can also inspect the spy's `calls` property, which is a list with one element per call received. Each element is a list of arguments.
+
+
+```
+$ io jasmine.io spy_spec.io 
+Spies
+  ✓ should throw if the object is nil
+  ✓ should throw if the method name is nil
+  ✓ should provide the spy in the method's scope slot
+  ✓ should start with an empty call list
+  ✓ should store the arguments used to call the spy
+
+Results: 5 specs, 0 failures
+
+toHaveBeenCalled matcher
+  ✓ should succeed if the spy was called
+  ✓ should fail if the spy wasn't called
+
+Results: 2 specs, 0 failures
+
+toHaveBeenCalledWith matcher
+  ✓ should succeed if the spy was called with the right arguments
+  ✓ should fail if the spy wasn't called
+  ✓ should fail if the spy was called with the wrong arguments
+
+Results: 3 specs, 0 failures
+```
+
 ## Contributors ##
 - [Trond Klakken](https://twitter.com/trondkla)
 - [Mikkel Dan-Rognlie](https://twitter.com/mikkelbd/)
