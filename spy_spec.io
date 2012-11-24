@@ -26,6 +26,19 @@ describe("Spies",
 		spiedOn foo
 		spiedOn foo(42, 36)
 		expect(spy calls) toEqual(list(list(), list(42, 36)))
+	),
+
+	it("should call the real method if andCallThrough was called",
+		spiedOn := Object clone
+		spiedOn realMethodCalled := false
+		spiedOn foo := method(a, b,
+			self realMethodCalled := true
+			ignored := expect(a) toEqual("asdf")
+			expect(b) toEqual(5)
+		)
+		spy := spyOn(spiedOn, "foo") andCallThrough
+		spiedOn foo("asdf", 5)
+		expect(spiedOn realMethodCalled) toEqual(true)
 	)
 )
 

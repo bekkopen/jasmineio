@@ -91,7 +91,13 @@ target doSomething
 expect(spy) toHaveBeenCalledWith("the value we expect")
 ```
 
-You can also inspect the spy's `calls` property, which is a list with one element per call received. Each element is a list of arguments.
+You can also inspect the spy's `calls` property, which is a list with one element per call received. Each element is a list of arguments. If you want to call the real method in addition to recording calls, use `andCallThrough`:
+
+```io
+spy := spyOn(target, "writeln") andCallThrough
+target doSomething 
+expect(spy) toHaveBeenCalledWith("the value we expect")
+```
 
 
 ```

@@ -175,6 +175,9 @@ spyOn := method(obj, methodName,
   if(obj == nil, Exception raise("Can't spy on nil"))
   if(methodName == nil, Exception raise("Method name wasn't passed to spyOn"))
   spy := Spy clone
+  spy obj := obj
+  spy name := methodName
+  obj setSlot(spy realMethodSlotName, obj getSlot(methodName))
 
   // Pass calls through to the spy object's run method.
   // We use explicit arguments instead of accessing "call messge arguments"
@@ -192,11 +195,19 @@ spyOn := method(obj, methodName,
 Spy := Object clone
 Spy init := method(
   self calls := List clone
+  self shouldCallThrough := false
 )
 Spy run := method(a, b, c, d, e,
-  // TODO: implement more interesting things than just logging our args.
-  self calls append(self argsToList(a, b, c, d, e))
-  // TODO: return a more sensible default
+  arglist := self argsToList(a, b, c, d, e)
+  self calls append(arglist)
+  if(self shouldCallThrough,
+    call delegateToMethod(self obj, self realMethodSlotName),
+    // We haven't been configured to do anything, so just return
+    // what would be the real method's "self".
+    self obj)
+)
+Spy realMethodSlotName := method(
+  "_jasmine_spy_" .. self name
 )
 Spy argsToList := method(a, b, c, d, e,
   if (e != nil, return list(a, b, c, d, e))
@@ -205,6 +216,10 @@ Spy argsToList := method(a, b, c, d, e,
   if (b != nil, return list(a, b))
   if (a != nil, return list(a))
   return list()
+)
+Spy andCallThrough := method(
+  self shouldCallThrough = true
+  self
 )
 // isSpy is just an aid to the Jasmine tests for spies.
 Spy isSpy := true
