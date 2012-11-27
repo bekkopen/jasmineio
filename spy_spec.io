@@ -28,6 +28,13 @@ describe("Spies",
 		expect(spy calls) toEqual(list(list(), list(42, 36)))
 	),
 
+	it("should handle nil arguments the same as non-nil",
+		spiedOn := Object clone
+		spy := spyOn(spiedOn, "foo")
+		spiedOn foo(42, nil)
+		expect(spy calls) toEqual(list(list(42, nil)))
+	),
+
 	it("should call the real method if andCallThrough was called",
 		spiedOn := Object clone
 		spiedOn realMethodCalled := false

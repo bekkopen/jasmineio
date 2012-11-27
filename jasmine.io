@@ -120,8 +120,8 @@ Matcher toHaveBeenCalled := method(
   false
 )
 
-Matcher toHaveBeenCalledWith := method(a, b, c, d, e,
-  expectedArglist := Spy argsToList(a, b, c, d, e)
+Matcher toHaveBeenCalledWith := method(
+  expectedArglist := call message argsEvaluatedIn(call sender)
   prefix := "Expected spy to have been called with " .. expectedArglist
   if(actual calls size == 0,
     self message := prefix .. " but it wasn't called."
@@ -179,14 +179,8 @@ spyOn := method(obj, methodName,
   spy name := methodName
   obj setSlot(spy realMethodSlotName, obj getSlot(methodName))
 
-  // Pass calls through to the spy object's run method.
-  // We use explicit arguments instead of accessing "call messge arguments"
-  // because the latter contains copies of the arguments with their prototypes
-  // stripped off. That isn't very useful for expectations or, well, anything.
-  // This approach limits us to 5 arguments, but that should be enough in most
-  // cases.
-  obj setSlot(methodName, method(a, b, c, d, e,
-    self run(a, b, c, d, e)
+  obj setSlot(methodName, method(
+    call delegateToMethod(self, "run")
   ))
   obj getSlot(methodName) setScope(spy)
   spy
@@ -197,8 +191,12 @@ Spy init := method(
   self calls := List clone
   self forwardTo := nil
 )
-Spy run := method(a, b, c, d, e,
-  arglist := self argsToList(a, b, c, d, e)
+Spy run := method(
+  // Evaluate the arguments in the context of the sender. This isn't always the right
+  // thing to do in Io since some methods evaluate their arguments in the receiver's
+  // context. But it's what we'd expect in the vast majority of cases where spies 
+  // are useful.
+  arglist := call message argsEvaluatedIn(call sender)
   self calls append(arglist)
   if(self forwardTo,
     call delegateToMethod(self forwardTo at(0), self forwardTo at(1))
@@ -208,14 +206,6 @@ Spy run := method(a, b, c, d, e,
 )
 Spy realMethodSlotName := method(
   "_jasmine_spy_" .. self name
-)
-Spy argsToList := method(a, b, c, d, e,
-  if (e != nil, return list(a, b, c, d, e))
-  if (d != nil, return list(a, b, c, d))
-  if (c != nil, return list(a, b, c))
-  if (b != nil, return list(a, b))
-  if (a != nil, return list(a))
-  return list()
 )
 Spy andCallThrough := method(
   self forwardTo := list(self obj, self realMethodSlotName)
