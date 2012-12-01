@@ -226,7 +226,7 @@ files foreach(filename,
   )
 )
 
-Jasmine suites foreach(suite,
+suiteFailures := Jasmine suites map(suite,
   suite run
   suite description println
 
@@ -246,4 +246,15 @@ Jasmine suites foreach(suite,
   writeln()
   if(failures > 0, report red println, report green println)
   writeln()
+
+  failures
+)
+
+// If there's more than one suite, report the overall results.
+if(Jasmine suites size > 1,
+	totalSpecs := Jasmine suites map(s, s specs size) reduce(+)
+	totalFailures := suiteFailures reduce(+)
+	report := "Overall results: " .. totalSpecs .. " specs, " ..  totalFailures .. " failures"
+
+	if(totalFailures > 0, report red println, report green println)
 )
