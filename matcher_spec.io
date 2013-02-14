@@ -66,7 +66,6 @@ describe("toThrow matcher",
 		matcher := expect(block(MyException raise)) toThrow(MyException)
 		expect(matcher success) toBe(true)
 	)
-
 )
 
 describe("Matcher tests for toEqual",
@@ -203,5 +202,18 @@ describe("Not matcher",
 	it("inverts default error messages",
 		ex := try(expect(1) not toBeLessThan(2))
 		expect(ex error) toEqual("Expected 1 not to be less than 2")
+	)
+)
+
+describe("Context handling in matchers",
+	it("should evaluate the argument in its existing locals context",
+		x := 2
+		expect(2) toBe(x) 
+	),
+
+	it("should not alter the spec's locals context",
+		x := 2
+		expect(true) toEqual(true)
+		expect(x) toBe(2)
 	)
 )

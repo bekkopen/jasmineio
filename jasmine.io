@@ -140,7 +140,7 @@ expect := method(actual,
     matcher actual := actual
     matcher expected := call message arguments at(0)
     matcher expectation := call message name
-    matcher success := matcher doMessage(call message, actual)
+    matcher success := call delegateTo(matcher)
 
     if(inverted, matcher success := if(matcher success, false, true))
     if(matcher success == false, Exception raise(matcher message(inverted)))
