@@ -114,6 +114,27 @@ Matcher message := method(inverted,
   "Expected " .. actual .. if(inverted, " not ", " ") .. expectation fromCamelCaseToSentence .. " " .. expected
 )
 
+Matcher toHaveBeenCalled := method(
+  if(actual calls size > 0, return true)
+  self message := "Expected spy to have been called"
+  false
+)
+
+Matcher toHaveBeenCalledWith := method(
+  expectedArglist := call message argsEvaluatedIn(call sender)
+  prefix := "Expected spy to have been called with " .. expectedArglist
+  if(actual calls size == 0,
+    self message := prefix .. " but it wasn't called."
+    return false
+  )
+  args := actual calls last
+  if (args != expectedArglist,
+    self message := prefix .. " but it was called with " .. args .. "."
+    return false
+  )
+  true
+)
+
 Sequence fromCamelCaseToSentence := method(
   output := ""
   self foreach(i, char,
@@ -149,6 +170,56 @@ expect := method(actual,
 
   wrapper
 )
+
+spyOn := method(obj, methodName,
+  if(obj == nil, Exception raise("Can't spy on nil"))
+  if(methodName == nil, Exception raise("Method name wasn't passed to spyOn"))
+  spy := Spy clone
+  spy obj := obj
+  spy name := methodName
+  obj setSlot(spy realMethodSlotName, obj getSlot(methodName))
+
+  obj setSlot(methodName, method(
+    call delegateToMethod(self, "run")
+  ))
+  obj getSlot(methodName) setScope(spy)
+  spy
+)
+
+Spy := Object clone
+Spy init := method(
+  self calls := List clone
+  self forwardTo := nil
+)
+Spy run := method(
+  // Evaluate the arguments in the context of the sender. This isn't always the right
+  // thing to do in Io since some methods evaluate their arguments in the receiver's
+  // context. But it's what we'd expect in the vast majority of cases where spies 
+  // are useful.
+  arglist := call message argsEvaluatedIn(call sender)
+  self calls append(arglist)
+  if(self forwardTo,
+    call delegateToMethod(self forwardTo at(0), self forwardTo at(1))
+    // We haven't been configured to do anything, so just return
+    // what would be the real method's "self".
+    self obj)
+)
+Spy realMethodSlotName := method(
+  "_jasmine_spy_" .. self name
+)
+Spy andCallThrough := method(
+  self forwardTo := list(self obj, self realMethodSlotName)
+  self
+)
+Spy andForwardTo := method(target, methodName,
+  self forwardTo := list(target, methodName)
+  self
+)
+Spy andCallFake := method(blockToCall,
+  self forwardTo := list(blockToCall, "call")
+)
+// isSpy is just an aid to the Jasmine tests for spies.
+Spy isSpy := true
 
 Spec := Object clone
 Spec run := method(
