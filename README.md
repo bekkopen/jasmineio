@@ -104,7 +104,7 @@ target doSomething
 expect(spy) toHaveBeenCalledWith("the value we expect")
 ```
 
-```io
+```
 $ io jasmine.io spy_spec.io 
 Spies
   ✓ should throw if the object is nil
