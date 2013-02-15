@@ -239,9 +239,13 @@ Spec run := method(
 )
 
 Suite := Object clone
+Suite beforeEach := method()
+Suite afterEach := method()
 Suite run := method(
-  specs foreach(spec,
+  specs foreach(spec,    
+    doMessage(beforeEach)
     spec run
+    doMessage(afterEach)
   )
 )
 
@@ -259,12 +263,22 @@ describe := method(description,
   args := call message arguments
   args removeFirst
 
-  args foreach(arg,
+  args foreach(arg,    
+    if(arg name beginsWithSeq("x"), continue)
+
+    if(arg name beginsWithSeq("beforeEach"),      
+      suite beforeEach := arg arguments at(0)
+      continue)
+
+    if(arg name beginsWithSeq("afterEach"),
+      suite afterEach := arg arguments at(0)
+      continue)  
+
     specDescription := arg arguments at(0) asString asMutable removePrefix("\"") removeSuffix("\"")
     spec := Spec clone
     spec description := specDescription
     spec test := arg arguments at(1)
-    if(arg name beginsWithSeq("x"), continue, specs append(spec))
+    specs append(spec)
   )
 
   Jasmine suites append(suite)
