@@ -28,8 +28,8 @@ Matcher toBeFalse := method(
 
 Matcher stringDiffIndex := method(string1, string2,
   if(string1 == string2, return nil)
-
   index := 0
+
   // Special case for string2 having string1 as a prefix
   if (string2 beginsWithSeq(string1),
     index = string1 size,
@@ -37,9 +37,8 @@ Matcher stringDiffIndex := method(string1, string2,
     // Otherwise we do a normal search
     string1 foreach(i, char,
       index = i
-      if(string2 at(i) isNil or
-  string1 at(i) asCharacter != string2 at(i) asCharacter,
-  break
+      if(string2 at(i) isNil or string1 at(i) asCharacter != string2 at(i) asCharacter, 
+        break
       )
     )
   )
@@ -123,10 +122,12 @@ Matcher toHaveBeenCalled := method(
 Matcher toHaveBeenCalledWith := method(
   expectedArglist := call message argsEvaluatedIn(call sender)
   prefix := "Expected spy to have been called with " .. expectedArglist
+
   if(actual calls size == 0,
     self message := prefix .. " but it wasn't called."
     return false
   )
+
   args := actual calls last
   if (args != expectedArglist,
     self message := prefix .. " but it was called with " .. args .. "."
@@ -187,10 +188,12 @@ spyOn := method(obj, methodName,
 )
 
 Spy := Object clone
+
 Spy init := method(
   self calls := List clone
   self forwardTo := nil
 )
+
 Spy run := method(
   // Evaluate the arguments in the context of the sender. This isn't always the right
   // thing to do in Io since some methods evaluate their arguments in the receiver's
@@ -204,20 +207,25 @@ Spy run := method(
     // what would be the real method's "self".
     self obj)
 )
+
 Spy realMethodSlotName := method(
   "_jasmine_spy_" .. self name
 )
+
 Spy andCallThrough := method(
   self forwardTo := list(self obj, self realMethodSlotName)
   self
 )
+
 Spy andForwardTo := method(target, methodName,
   self forwardTo := list(target, methodName)
   self
 )
+
 Spy andCallFake := method(blockToCall,
   self forwardTo := list(blockToCall, "call")
 )
+
 // isSpy is just an aid to the Jasmine tests for spies.
 Spy isSpy := true
 
