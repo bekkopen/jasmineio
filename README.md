@@ -85,6 +85,7 @@ Results: 3 specs, 2 failures
 
 ## Spies ##
 Jasmine.io supports spies, which allow you to record and verify calls made to a method:
+
 ```io
 spy := spyOn(target, "writeln")
 target doSomething
@@ -103,8 +104,7 @@ target doSomething
 expect(spy) toHaveBeenCalledWith("the value we expect")
 ```
 
-
-```
+```io
 $ io jasmine.io spy_spec.io 
 Spies
   ✓ should throw if the object is nil
@@ -137,8 +137,4 @@ Results: 3 specs, 0 failures
 - [Jonas Follesø](https://twitter.com/follesoe)
 - [Johannes Hoff](http://johanneshoff.com/)
 - [Ryan Leavengood](https://twitter.com/leavengood)
-
-
-
-
-
+- [Steve Gravrock](https://github.com/sgravrock)
