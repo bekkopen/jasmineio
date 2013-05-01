@@ -243,9 +243,9 @@ Suite beforeEach := method()
 Suite afterEach := method()
 Suite run := method(
   specs foreach(spec,    
-    doMessage(beforeEach)
+    (beforeEach != nil) ifTrue (doMessage(beforeEach))
     spec run
-    doMessage(afterEach)
+    (afterEach != nil) ifTrue (doMessage(afterEach))
   )
 )
 
