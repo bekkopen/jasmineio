@@ -138,3 +138,4 @@ Results: 3 specs, 0 failures
 - [Johannes Hoff](http://johanneshoff.com/)
 - [Ryan Leavengood](https://twitter.com/leavengood)
 - [Steve Gravrock](https://github.com/sgravrock)
+- [Pietro Martinelli](http://javapeanuts.blogspot.no/)
