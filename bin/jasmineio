@@ -1,3 +1,9 @@
+#!/usr/local/bin/io
+
+Importer addSearchPath("../io") // if jasmineio doesn't installed with Eerie
+
+
+
 Matcher := Object clone
 
 Matcher toEqual := method(expected,
@@ -302,6 +308,22 @@ colors slotNames foreach(color,
 )
 
 # Runner
+// command line commands
+showUsage := method(
+  "Usage:\n jasmineio spec\n\texecute the spec\n jasmineio\n\trecursively search for _spec.io" println
+)
+
+// showing help
+if(System args at(1) == "help" or(System args size > 2),
+  showUsage()
+  return
+)
+
+// warn user about recursive search
+if(System args size < 2,
+  "Warning:\n\tjasmineio will recursively search for specs in all the underlining directories.\n" println
+)
+
 files := List clone
 runnerArguments := System args rest map(item,
   Directory currentWorkingDirectory asMutable appendSeq("/", item))

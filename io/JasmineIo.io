@@ -1,0 +1,3 @@
+JasmineIo := Object clone do(
+
+)

@@ -5,6 +5,16 @@ Jasmine.Io is a [Io Language](http://www.iolanguage.com) port of the popular Beh
 
 The project was implemented as a learning exercise after reading the [7 languages in 7 weeks book](http://pragprog.com/book/btlang/seven-languages-in-seven-weeks), where Io is the second language introduced. The implementation makes relies on Io's strong metaprogramming capabilities..
 
+## Installation
+
+Using [Eerie](https://github.com/AlesTsurko/eerie):
+
+```
+eerie install git://github.com/bekkopen/jasmineio.git
+```
+
+Otherwise just clone the repository.
+
 ## Example specification and usage ##
 ```Io
 getFizzBuzz := method(number,
@@ -33,10 +43,19 @@ describe("FizzBuzz",
 )
 ```
 
-You execute the spec by calling ``$ Io jasmine.io fizzbuzz_spec.io``. If you do not specify a spec-file to run, Jasmine.Io will recursively walk your working directory, executing any file name ending with ``_spec.io``.
+If you've installed `jasmineio` with Eerie, execute the spec by calling:
+```
+jasmineio fizzbuz_spec.io
+```
+
+Otherwise run the script `jasmineio` from `bin` directory:
+```
+$ io jasmineio fizzbuzz_spec.io
+```
+If you do not specify a spec-file to run, Jasmine.Io will recursively walk your working directory, executing any file name ending with ``_spec.io``.
 
 ```
-$ Io jasmine.io fizzbuzz_spec.io 
+$ jasmineio fizzbuzz_spec.io 
 FizzBuzz
   ✓ Should return Fizz for divisible of three: passed
   ✓ Should return Buzz for divisible of five: passed
@@ -74,7 +93,7 @@ describe("Custom matchers",
 ```
 
 ```
-$ Io jasmine.io matcher_spec.io 
+$ jasmineio matcher_spec.io 
 Custom matchers
   ✓ is possible to add matchers by adding a method to the Matcher prototype: passed
   ϰ should error messages generated automatically: Expected 2 to be less than 1
@@ -105,7 +124,7 @@ expect(spy) toHaveBeenCalledWith("the value we expect")
 ```
 
 ```
-$ io jasmine.io spy_spec.io 
+$ jasmineio spy_spec.io 
 Spies
   ✓ should throw if the object is nil
   ✓ should throw if the method name is nil
