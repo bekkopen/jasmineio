@@ -1,0 +1,15 @@
+{
+  "name":         "jasmineio",
+  "version":      "1.0.0",
+  "description":  "A Jasmine BDD port for Io Language.",
+  "author":       "BEKK open source",
+  "website":      "https://github.com/bekkopen/jasmineio",
+  "readme":       "README.md",
+  "protos":       [],
+  "dependencies": {
+    "libs":     [],
+    "headers":  [],
+    "protos":   [],
+    "packages": []
+  }
+}
