@@ -1,6 +1,6 @@
 #!/usr/local/bin/io
 
-Importer addSearchPath("../io") // if jasmineio doesn't installed with Eerie
+Importer addSearchPath("../io") // if jasmineio wasn't installed with Eerie
 
 
 
@@ -321,7 +321,7 @@ if(System args at(1) == "help" or(System args size > 2),
 
 // warn user about recursive search
 if(System args size < 2,
-  "Warning:\n\tjasmineio will recursively search for specs in all the underlining directories.\n" println
+  "Warning:\n\tjasmineio will recursively search for specs in all the underlying directories.\n" println
 )
 
 files := List clone
