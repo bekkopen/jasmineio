@@ -7,7 +7,7 @@ The project was implemented as a learning exercise after reading the [7 language
 
 ## Installation
 
-Using [Eerie](https://github.com/AlesTsurko/eerie):
+Using [Eerie](https://github.com/tonikasoft/eerie):
 
 ```
 eerie install git://github.com/bekkopen/jasmineio.git
